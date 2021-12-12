@@ -8,7 +8,7 @@ with open(".data.json", "r") as file:
 
 setup(
     name="hmac-http",
-    version=version,
+    version=float(version),
     author="Hunter Wittenborn",
     author_email="hunter@hunterwittenborn.com",
     description="Python library for the draft-cavage-http-signatures-10 specification",
