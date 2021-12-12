@@ -28,7 +28,7 @@ local createTag() = {
         environment: {ssh_key: {from_secret: "ssh_key"}},
         commands: [
             "sudo -E apt-get install curl jq -y",
-            "curl \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
+            "curl -L \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
             ".drone/scripts/create-tag.sh"
         ]
     }]
@@ -49,7 +49,7 @@ local publishPackage() = {
         environment: {ssh_key: {from_secret: "ssh_key"}},
         commands: [
             "sudo -E apt-get install curl -y",
-            "curl \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
+            "curl -L \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
             "bash .drone/scripts/publish.sh"
         ]
     }]
