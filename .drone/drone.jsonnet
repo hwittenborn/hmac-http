@@ -26,7 +26,7 @@ local publishPackage() = {
         commands: [
             "pip install build twine",
             "python3 -m build",
-            "twine upload -u \"api:$${proget_apt_key}\" --repository-url \"https://$${proget_server}/pypi/python/legacy\" --non-interactive dist/*"
+            "twine upload -u api -p \"$${proget_apt_key}\" --repository-url \"https://$${proget_server}/pypi/python/legacy\" dist/*"
         ]
     }]
 };
