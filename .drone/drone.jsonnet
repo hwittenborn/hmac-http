@@ -27,7 +27,7 @@ local createTag() = {
         image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
         environment: {ssh_key: {from_secret: "ssh_key"}},
         commands: [
-            "sudo -E apt-get install curl jq -y",
+            "sudo -E apt-get install curl jq git -y",
             "curl -L \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
             ".drone/scripts/create-tag.sh"
         ]
@@ -48,7 +48,7 @@ local publishPackage() = {
         image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
         environment: {ssh_key: {from_secret: "ssh_key"}},
         commands: [
-            "sudo -E apt-get install curl -y",
+            "sudo -E apt-get install curl git -y",
             "curl -L \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
             "bash .drone/scripts/publish.sh"
         ]
