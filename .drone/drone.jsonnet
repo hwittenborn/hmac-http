@@ -18,6 +18,7 @@ local publishPackage() = {
     kind: "pipeline",
     type: "docker",
     trigger: {repo: ["hwittenborn/hmac-http"]},
+    depends_on: ["run-tests"],
     steps: [{
         name: "publish-package",
         image: "python:3",
@@ -25,7 +26,7 @@ local publishPackage() = {
         commands: [
             "pip install build twine",
             "python3 -m build",
-            "twine upload --repository-url \"$${proget_server}/pypi/python/legacy\" dist/*"
+            "twine upload --repository-url \"https://$${proget_server}/pypi/python/legacy\" dist/*"
         ]
     }]
 };
