@@ -26,7 +26,10 @@ local createTag() = {
         name: "create-tag",
         image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
         environment: {ssh_key: {from_secret: "ssh_key"}},
-        commands: [".drone/scripts/create-tag.sh"]
+        commands: [
+            "sudo -E apt-get install curl jq -y",
+            ".drone/scripts/create-tag.sh"
+        ]
     }]
 };
 
