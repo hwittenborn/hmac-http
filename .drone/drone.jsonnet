@@ -23,11 +23,7 @@ local publishPackage() = {
         name: "publish-package",
         image: "python:3",
         environment: {proget_api_key: {from_secret: "proget_api_key"}},
-        commands: [
-            "pip install build twine",
-            "python3 -m build",
-            "twine upload -u api -p \"$${proget_apt_key}\" --repository-url \"https://$${proget_server}/pypi/python/legacy\" dist/*"
-        ]
+        commands: [".drone/scripts/publish.sh"]
     }]
 };
 
