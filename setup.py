@@ -15,4 +15,5 @@ setup(
     url="https://github.com/hwittenborn/hmac-http",
     packages=find_packages(),
     include_package_data=True,
+    install_requires=["setuptools", "wheel"],
 )
