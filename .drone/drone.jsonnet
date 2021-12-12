@@ -23,7 +23,7 @@ local publishPackage() = {
         name: "publish-package",
         image: "python:3",
         environment: {proget_api_key: {from_secret: "proget_api_key"}},
-        commands: [".drone/scripts/publish.sh"]
+        commands: ["bash .drone/scripts/publish.sh"]
     }]
 };
 
