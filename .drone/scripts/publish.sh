@@ -1,14 +1,23 @@
 #!/usr/bin/bash
-set -ex
+set -e
+mpr_fingerprint='SHA256:TQtnFwjBwpDOHnHTaANeudpXVmomlYo6Td/8T51FA/w'
 
-apt-get update
-apt-get install curl jq -y
+SSH_HOST="${mpr_url}" \
+SSH_EXPECTED_FINGERPRINT="${mpr_fingerprint}" \
+SET_PERMS="true" \
+get-ssh-key
 
-pkgver="$(cat .data.json | jq -r '.version')"
+echo "${ssh_key}" > "${HOME}/.ssh/ssh_key"
+echo "Host ${mpr_url}" > "/${HOME}/.ssh/config"
+echo "  Hostname ${mpr_url}" > "/${HOME}/.ssh/config"
+echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 
-pip install build
-python -m build
+git clone "ssh://mpr@${mpr_url}/python3-hmac-http"
+cp makedeb/PKGBUILD python3-hmac-http/PKGBUILD
+cd python3-hmac-http/
+makedeb --print-srcinfo > .SRCINFO
 
-curl "https://${proget_server}/pypi/python/upload/hmac-http-${pkgver}.tar.gz" \
-     --user "api:${proget_api_key}" \
-     --upload-file "./dist/hmac-http-${pkgver}.tar.gz"
+source PKGBUILD
+git add PKGBUILD .SRCINFO
+git commit -m "Updated version to ${pkgver}-${pkgrel}"
+git push

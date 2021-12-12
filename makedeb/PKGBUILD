@@ -1,0 +1,17 @@
+# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+pkgname=python3-hmac-http
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Python 3 library for the draft-cavage-http-signatures-10 specification"
+arch=('any')
+depends=('python3')
+makedepends=('python3-setuptools')
+url='https://github.com/hwittenborn/hmac-http'
+
+source=("hmac-http::git+${url}#tag=v${pkgver}")
+sha256sums=('SKIP')
+
+package() {
+    cd hmac-http/
+    python3 ./setup.py install --prefix='./usr' --root="${pkgdir}" --install-layout=deb
+}

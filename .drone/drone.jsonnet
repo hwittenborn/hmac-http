@@ -13,22 +13,48 @@ local runTests() = {
     }]
 };
 
+local createTag() = {
+    name: "create-tag",
+    kind: "pipeline",
+    type: "docker",
+    trigger: {
+        repo: ["hwittenborn/hmac-http"],
+        branch: ["main"]
+    },
+    depends_on: ["run-tests"],
+    steps: [{
+        name: "create-tag",
+        image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
+        environment: {ssh_key: {from_secret: "ssh_key"}},
+        commands: [".drone/scripts/create-tag.sh"]
+    }]
+};
+
 local publishPackage() = {
     name: "publish-package",
     kind: "pipeline",
     type: "docker",
-    trigger: {repo: ["hwittenborn/hmac-http"]},
-    depends_on: ["run-tests"],
+    trigger: {
+        repo: ["hwittenborn/hmac-http"],
+        branch: ["main"]
+    },
+    depends_on: ["create-tag"],
     steps: [{
         name: "publish-package",
-        image: "python:3",
-        environment: {proget_api_key: {from_secret: "proget_api_key"}},
-        commands: ["bash .drone/scripts/publish.sh"]
+        image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
+        environment: {ssh_key: {from_secret: "ssh_key"}},
+        commands: [
+            "sudo -E apt-get install curl -y",
+            "curl \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
+            "bash .drone/scripts/publish.sh"
+        ]
     }]
 };
 
 [
     runTests(),
+    createTag(),
     publishPackage()
 ]
+
 # vim: set syntax=javascript

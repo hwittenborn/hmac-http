@@ -14,6 +14,4 @@ setup(
     description="Python library for the draft-cavage-http-signatures-10 specification",
     url="https://github.com/hwittenborn/hmac-http",
     packages=find_packages(),
-    include_package_data=True,
-    setup_requires=["setuptools", "wheel"],
 )
