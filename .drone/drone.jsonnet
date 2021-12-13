@@ -21,7 +21,7 @@ local publishPackage() = {
         repo: ["hwittenborn/hmac-http"],
         branch: ["main"]
     },
-    depends_on: ["create-tag"],
+    depends_on: ["run-tests"],
     steps: [{
         name: "publish-package",
         image: "python:3",
