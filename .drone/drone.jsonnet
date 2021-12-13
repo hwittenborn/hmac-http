@@ -13,28 +13,6 @@ local runTests() = {
     }]
 };
 
-local createTag() = {
-    name: "create-tag",
-    kind: "pipeline",
-    type: "docker",
-    trigger: {
-        repo: ["hwittenborn/hmac-http"],
-        branch: ["main"]
-    },
-    depends_on: ["run-tests"],
-    steps: [{
-        name: "create-tag",
-        image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
-        environment: {ssh_key: {from_secret: "ssh_key"}},
-        commands: [
-            "sudo chown 'makedeb:makedeb' ./ -R",
-            "sudo -E apt-get install curl jq git -y",
-            "curl -L \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
-            ".drone/scripts/create-tag.sh"
-        ]
-    }]
-};
-
 local publishPackage() = {
     name: "publish-package",
     kind: "pipeline",
@@ -46,20 +24,18 @@ local publishPackage() = {
     depends_on: ["create-tag"],
     steps: [{
         name: "publish-package",
-        image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
-        environment: {ssh_key: {from_secret: "ssh_key"}},
+        image: "python:3",
+        environment: {pypi_api_key: {from_secret: "pypi_api_key"}},
         commands: [
-            "sudo chown 'makedeb:makedeb' ./ -R",
-            "sudo -E apt-get install curl git -y",
-            "curl -L \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
-            "bash .drone/scripts/publish.sh"
+            "pip install build twine",
+            "python3 -m build",
+            "twine upload -u '__token__' -p \"$${pypi_api_key}\" dist/*"
         ]
     }]
 };
 
 [
     runTests(),
-    createTag(),
     publishPackage()
 ]
 
