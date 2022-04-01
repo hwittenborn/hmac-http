@@ -2,6 +2,7 @@ local runTests() = {
     name: "run-tests",
     kind: "pipeline",
     type: "docker",
+    trigger: {branch: ["main"]},
     steps: [{
         name: "run-tests",
         image: "python:3",
